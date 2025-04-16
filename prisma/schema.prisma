@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  names     String   @db.VarChar(50)
+  surnames  String   @db.VarChar(50)
+  email     String   @unique @db.VarChar(100)
+  cellphone String   @unique @db.VarChar(9)
+  account   Account?
+}
+
+model Account {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique @db.VarChar(25)
+  password  String   @db.VarChar(60)
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?  @unique @db.VarChar(25)
+  role      Role     @default(User)
+}
+
+enum Role {
+  Admin
+  User
+}
+
+enum CurrencyType {
+  PEN
+  USD
+}
+
+model Office {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(50)
+  invoces   Invoice[]
+}
+
+model Invoice {
+  id            Int           @id @default(autoincrement())
+  invoiceNumber String        @unique @db.VarChar(35)
+  invoiceDate   DateTime
+  policyNumber  String        @db.VarChar(35)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  currencyType  CurrencyType  @default(PEN)
+  office        Office?       @relation(fields: [officeId], references: [id])
+  officeId      Int?
+}
