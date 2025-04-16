@@ -44,7 +44,7 @@ model Office {
 
 model Invoice {
   id            Int           @id @default(autoincrement())
-  invoiceNumber String        @unique @db.VarChar(35)
+  invoiceNumber String        @db.VarChar(35)
   invoiceDate   DateTime
   policyNumber  String        @db.VarChar(35)
   createdAt     DateTime      @default(now())
