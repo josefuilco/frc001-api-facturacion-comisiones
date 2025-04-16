@@ -18,6 +18,11 @@ services:
       retries: 5
     volumes:
       - mariadb_data:/var/lib/mysql
+    networks:
+      - webapi
 
 volumes:
   mariadb_data:
+
+networks:
+  webapi:
